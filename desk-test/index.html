@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Desk (test)</title>
+<style>
+:root{--bg:#f6f7f9;--fg:#15181d;--mut:#5f6773;--line:#dfe3e8;--panel:#fff;--acc:#1f5fd6;--ok:#1d7a46;--warn:#b25a00;--bad:#b3261e;--chip:#eef1f5}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1115;--fg:#e9ecf1;--mut:#9aa3af;--line:#2a2f37;--panel:#171a20;--acc:#6aa0ff;--ok:#4cc38a;--warn:#f0a35b;--bad:#ff7b72;--chip:#222730}}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 14px calc(8px) 14px;display:flex;gap:8px;align-items:center}
+header h1{font-size:17px;margin:0;flex:1}header .sub{font-size:12px;color:var(--mut);font-weight:400;display:block}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:8px 12px;min-height:40px}
+button.pri{background:var(--acc);border-color:var(--acc);color:#fff}button:disabled{opacity:.5;cursor:default}
+input,textarea{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%}
+main{max-width:760px;margin:0 auto;padding:10px 12px 140px}
+.lock{max-width:420px;margin:12vh auto;padding:20px}.lock h2{margin:0 0 6px}.lock p{color:var(--mut);margin:0 0 14px}
+.err{color:var(--bad);font-size:14px;margin-top:8px;white-space:pre-wrap}.okmsg{color:var(--ok);font-size:14px;margin-top:8px}
+details.sec{margin:12px 0}details.sec>summary{list-style:none;cursor:pointer;font-weight:700;font-size:17px;padding:8px 2px;display:flex;align-items:center;gap:8px}
+details.sec>summary::-webkit-details-marker{display:none}details.sec>summary:before{content:"\25B8";color:var(--mut);transition:transform .15s}details.sec[open]>summary:before{transform:rotate(90deg)}
+.count{font-size:12px;font-weight:600;color:var(--mut);background:var(--chip);border-radius:20px;padding:2px 8px}
+.note{font-size:13px;color:var(--mut);margin:0 0 8px 4px}
+.prof{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden}
+.prof>summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:700;display:flex;gap:8px;align-items:center}.prof>summary::-webkit-details-marker{display:none}
+.it{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin:8px 0}
+.prof .it{border:0;border-top:1px solid var(--line);border-radius:0;margin:0}
+.it.pending{border-left:4px solid var(--warn)}.it.sent{border-left:4px solid var(--ok)}
+.top{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+.id{font:600 12px ui-monospace,Menlo,monospace;background:var(--chip);border-radius:6px;padding:2px 6px}
+.kind{font-size:12px;color:var(--mut)}.co{font-size:12px;color:var(--mut)}
+.title{font-weight:600}.detail{font-size:14px;color:var(--fg);opacity:.9;margin-top:4px}.meta{font-size:13px;color:var(--mut);margin-top:4px}
+.detail.clip{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.more{font-size:13px;color:var(--acc);background:none;border:0;padding:2px 0;min-height:0}
+a.open{font-size:13px;color:var(--acc);text-decoration:none;margin-left:auto}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.acts button{flex:1 1 auto;min-width:64px;padding:7px 8px}
+.acts button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.nrow{margin-top:8px}.nrow input{font-size:15px;padding:8px 10px}
+.state{font-size:12px;margin-top:6px}.state.p{color:var(--warn)}.state.s{color:var(--ok)}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--panel);border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+.bar .in{max-width:760px;margin:0 auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.bar .lbl{flex:1 1 100%;font-size:14px;color:var(--mut)}
+.bar button{flex:1 1 0}
+.msg{max-width:760px;margin:6px auto 0;font-size:14px;white-space:pre-wrap}
+.search{margin:6px 0 4px}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--fg);width:min(520px,94vw);padding:18px}
+dialog::backdrop{background:rgba(0,0,0,.45)}dialog label{display:block;font-size:14px;font-weight:600;margin:12px 0 4px}dialog .hint{font-size:12px;color:var(--mut);margin-top:4px}
+.row{display:flex;gap:8px;margin-top:16px}.row button{flex:1}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="lock" class="lock">
+  <h2>Desk</h2>
+  <p>Test version. Enter your board password to open today's Desk on this device.</p>
+  <form id="lockform"><input id="pw" type="password" autocomplete="current-password" placeholder="Password" autofocus>
+  <div style="margin-top:10px"><button class="pri" style="width:100%">Open</button></div></form>
+  <div id="lockerr" class="err"></div>
+</div>
+
+<div id="app" class="hidden">
+  <header><h1>Desk <span class="sub" id="asof"></span></h1>
+    <button id="btnSettings" aria-label="Settings">Settings</button><button id="btnLock">Lock</button></header>
+  <main>
+    <input id="q" class="search" type="search" placeholder="Find a company, person or item">
+    <div id="content"></div>
+  </main>
+  <div class="bar"><div class="in">
+    <div class="lbl" id="pendLbl">No answers yet</div>
+    <button id="btnCopy">Copy answers</button>
+    <button id="btnShare" class="hidden">Share</button>
+    <button id="btnSend" class="pri">Send</button>
+  </div><div class="msg" id="msg"></div></div>
+</div>
+
+<dialog id="dlg">
+  <h3 style="margin:0">Settings</h3>
+  <div class="hint">Saved only in this browser on this device. Nothing here goes into the page files.</div>
+  <label for="sUrl">Answer link (webhook URL)</label>
+  <input id="sUrl" type="url" placeholder="https://api2.cursor.sh/automations/webhook/..." autocomplete="off">
+  <label for="sKey">Sender key</label>
+  <input id="sKey" type="password" placeholder="Paste the key, or the whole copied header line" autocomplete="off">
+  <div class="hint">You can paste just the key, or the full line like "Authorization: Bearer ...".</div>
+  <label for="sHdr">Header name</label>
+  <input id="sHdr" type="text" value="Authorization" autocomplete="off">
+  <div class="hint">Leave as Authorization. The key is sent as "Bearer &lt;key&gt;" unless you pasted your own format.</div>
+  <div class="row"><button id="sClear" type="button">Clear</button><button id="sCancel" type="button">Cancel</button><button id="sSave" class="pri" type="button">Save</button></div>
+</dialog>
+
+<script>
+(() => {
+"use strict";
+const $ = (id) => document.getElementById(id);
+const LS_SET = "deskapp.settings.v1";
+let DATA = null, PEND = {}, LS_PEND = "";
+const enc = new TextEncoder(), dec = new TextDecoder();
+const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+
+async function decryptEnv(env, password) {
+  const base = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt: b64(env.salt_b64), iterations: env.iter },
+    base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(env.iv_b64) }, key, b64(env.ct_b64));
+  return JSON.parse(dec.decode(pt));
+}
+
+$("lockform").addEventListener("submit", async (e) => {
+  e.preventDefault(); $("lockerr").textContent = "Opening...";
+  try {
+    const r = await fetch("data.json?t=" + Date.now(), { cache: "no-store" });
+    if (!r.ok) throw new Error("Could not load the Desk file (" + r.status + ").");
+    const env = await r.json();
+    let d;
+    try { d = await decryptEnv(env, $("pw").value); } catch (_) { throw new Error("Wrong password."); }
+    $("pw").value = ""; $("lockerr").textContent = "";
+    open_(d);
+  } catch (err) { $("lockerr").textContent = err.message || String(err); }
+});
+$("btnLock").onclick = () => { DATA = null; $("content").replaceChildren(); $("app").classList.add("hidden"); $("lock").classList.remove("hidden"); };
+
+function open_(d) {
+  DATA = d; LS_PEND = "deskapp.pending." + d.date;
+  try { PEND = JSON.parse(localStorage.getItem(LS_PEND) || "{}"); } catch (_) { PEND = {}; }
+  $("asof").textContent = d.dateLabel + (d.asOf ? " · as of " + d.asOf : "");
+  $("lock").classList.add("hidden"); $("app").classList.remove("hidden");
+  if (navigator.share) $("btnShare").classList.remove("hidden");
+  render(); updBar();
+}
+const savePend = () => localStorage.setItem(LS_PEND, JSON.stringify(PEND));
+
+function el(tag, attrs, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") n.className = v; else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else if (v !== undefined && v !== null) n.setAttribute(k, v);
+  }
+  for (const c of kids) if (c !== null && c !== undefined && c !== false) n.append(c.nodeType ? c : String(c));
+  return n;
+}
+const short = (s, n) => (s.length > n ? s.slice(0, n - 3).trimEnd() + "..." : s);
+const labelOf = (it) => short((it.company ? it.company + ": " : "") + it.title, 90);
+
+function itemNode(it) {
+  const p = PEND[it.id];
+  const node = el("div", { class: "it" + (p ? (p.status === "sent" ? " sent" : " pending") : ""), "data-id": it.id,
+    "data-text": (it.id + " " + it.company + " " + it.title + " " + it.detail + " " + it.meta).toLowerCase() });
+  const top = el("div", { class: "top" }, el("span", { class: "id" }, it.id), el("span", { class: "kind" }, it.kind));
+  if (it.link && /^https:\/\//.test(it.link)) top.append(el("a", { class: "open", href: it.link, target: "_blank", rel: "noopener noreferrer" }, "Open"));
+  node.append(top, el("div", { class: "title" }, it.title));
+  if (it.detail) {
+    const dd = el("div", { class: "detail clip" }, it.detail);
+    node.append(dd);
+    if (it.detail.length > 160) node.append(el("button", { class: "more", type: "button", onclick: (e) => { dd.classList.toggle("clip"); e.target.textContent = dd.classList.contains("clip") ? "More" : "Less"; } }, "More"));
+  }
+  if (it.meta) node.append(el("div", { class: "meta" }, it.meta));
+  const answers = it.question ? ["Yes", "No", "Done", "Nudge", "Snooze"] : ["Done", "Nudge", "Snooze"];
+  const acts = el("div", { class: "acts" });
+  for (const a of answers) {
+    const on = p && p.answer === a.toLowerCase();
+    acts.append(el("button", { type: "button", class: on ? "on" : "", onclick: () => setAnswer(it, a.toLowerCase()) }, a));
+  }
+  node.append(acts);
+  const inp = el("input", { type: "text", placeholder: "Note (optional)", enterkeyhint: "done" });
+  inp.value = (p && p.note) || "";
+  inp.addEventListener("change", () => setNote(it, inp.value));
+  inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { inp.blur(); } });
+  node.append(el("div", { class: "nrow" }, inp));
+  if (p) node.append(el("div", { class: "state " + (p.status === "sent" ? "s" : "p") },
+    p.status === "sent" ? "Sent " + new Date(p.sent_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "Pending, not sent yet"));
+  return node;
+}
+function refreshItem(it) {
+  const old = document.querySelector('.it[data-id="' + CSS.escape(it.id) + '"]');
+  if (old) old.replaceWith(itemNode(it));
+  updBar();
+}
+function setAnswer(it, a) {
+  const p = PEND[it.id];
+  if (p && p.answer === a && p.status !== "sent") { if (p.note) { p.answer = "note"; } else delete PEND[it.id]; }
+  else PEND[it.id] = { answer: a, note: (p && p.note) || "", label: labelOf(it), status: "pending" };
+  savePend(); refreshItem(it);
+}
+function setNote(it, v) {
+  v = v.trim(); const p = PEND[it.id];
+  if (p) { p.note = v; if (p.status === "sent") p.status = "pending"; if (!v && p.answer === "note") delete PEND[it.id]; }
+  else if (v) PEND[it.id] = { answer: "note", note: v, label: labelOf(it), status: "pending" };
+  savePend(); refreshItem(it);
+}
+
+function section(sec) {
+  const d = el("details", { class: "sec" }); if (sec.open) d.open = true;
+  d.append(el("summary", {}, sec.title, el("span", { class: "count" }, sec.items.length)));
+  for (const n of sec.notes || []) d.append(el("div", { class: "note" }, n));
+  if (!sec.items.length) d.append(el("div", { class: "note" }, "Nothing open."));
+  for (const it of sec.items) d.append(itemNode(it));
+  return d;
+}
+function render() {
+  const c = $("content"); c.replaceChildren();
+  for (const s of DATA.sections_top) c.append(section(s));
+  const pd = el("details", { class: "sec" }); pd.open = true;
+  pd.append(el("summary", {}, "Company profiles", el("span", { class: "count" }, DATA.profiles.length)));
+  for (const p of DATA.profiles) {
+    const pr = el("details", { class: "prof", "data-co": p.company.toLowerCase() });
+    pr.append(el("summary", {}, p.company, el("span", { class: "count" }, p.items.length)));
+    for (const it of p.items) pr.append(itemNode(it));
+    pd.append(pr);
+  }
+  c.append(pd);
+  for (const s of DATA.sections_bottom) c.append(section(s));
+  applyFilter();
+}
+function applyFilter() {
+  const q = $("q").value.trim().toLowerCase();
+  document.querySelectorAll(".it").forEach((n) => n.classList.toggle("hidden", !!q && !n.dataset.text.includes(q)));
+  document.querySelectorAll("details.prof").forEach((pr) => {
+    const any = [...pr.querySelectorAll(".it")].some((n) => !n.classList.contains("hidden"));
+    pr.classList.toggle("hidden", !!q && !any); if (q && any) pr.open = true;
+  });
+  if (q) document.querySelectorAll("details.sec").forEach((s) => { if ([...s.querySelectorAll(".it")].some((n) => !n.classList.contains("hidden"))) s.open = true; });
+}
+$("q").addEventListener("input", applyFilter);
+
+const pending = () => Object.entries(PEND).filter(([, p]) => p.status !== "sent");
+function updBar() {
+  const n = pending().length, s = Object.values(PEND).filter((p) => p.status === "sent").length;
+  $("pendLbl").textContent = n ? n + " answer" + (n > 1 ? "s" : "") + " pending" + (s ? " · " + s + " sent" : "") : (s ? s + " sent · nothing pending" : "No answers yet");
+  $("btnSend").disabled = !n; $("btnCopy").disabled = !n; $("btnShare").disabled = !n;
+}
+function plainText(list) {
+  return list.map(([id, p]) => {
+    let t = id + " " + (p.answer === "note" ? "note" : p.answer) + " (" + p.label + ")";
+    if (p.note) t += ", note: " + p.note;
+    return t + ".";
+  }).join("\n");
+}
+function setMsg(t, cls) { const m = $("msg"); m.textContent = t || ""; m.style.color = cls === "bad" ? "var(--bad)" : cls === "ok" ? "var(--ok)" : "var(--mut)"; }
+function markSent(ids) { const at = new Date().toISOString(); for (const id of ids) if (PEND[id]) { PEND[id].status = "sent"; PEND[id].sent_at = at; } savePend(); render(); updBar(); }
+
+async function copyAnswers() {
+  const list = pending(); if (!list.length) return;
+  const txt = plainText(list);
+  try { await navigator.clipboard.writeText(txt); }
+  catch (_) { const ta = el("textarea", {}); ta.value = txt; document.body.append(ta); ta.select(); document.execCommand("copy"); ta.remove(); }
+  setMsg("Copied " + list.length + " answer" + (list.length > 1 ? "s" : "") + ". Paste them into chat.", "ok");
+  const ids = list.map(([id]) => id);
+  const b = el("button", { type: "button", style: "margin-top:6px;width:100%", onclick: () => { markSent(ids); setMsg("Marked as sent.", "ok"); } }, "I pasted them, mark as sent");
+  $("msg").append(el("br"), b);
+}
+$("btnCopy").onclick = copyAnswers;
+$("btnShare").onclick = async () => {
+  const list = pending(); if (!list.length) return;
+  try { await navigator.share({ text: plainText(list) }); markSent(list.map(([id]) => id)); setMsg("Shared and marked as sent.", "ok"); }
+  catch (e) { if (e && e.name !== "AbortError") setMsg("Share did not work: " + e.message, "bad"); }
+};
+
+function getSettings() { try { return JSON.parse(localStorage.getItem(LS_SET) || "{}"); } catch (_) { return {}; } }
+function authHeader(s) {
+  let name = (s.hdr || "Authorization").trim(), val = (s.key || "").trim();
+  const m = val.match(/^([A-Za-z0-9-]+)\s*:\s*(.+)$/);
+  if (m && !/^bearer$/i.test(m[1])) { name = m[1]; val = m[2].trim(); }
+  if (/^authorization$/i.test(name) && !/^(bearer|basic|token)\s/i.test(val)) val = "Bearer " + val;
+  return [name, val];
+}
+$("btnSend").onclick = async () => {
+  const list = pending(); if (!list.length) return;
+  const s = getSettings();
+  if (!s.url || !s.key) { setMsg("Add the answer link and sender key in Settings first, or use Copy answers.", "bad"); $("dlg").showModal(); fillSettings(); return; }
+  const payload = { sent_at: new Date().toISOString(), desk_date: DATA.date,
+    answers: list.map(([id, p]) => ({ id, label: p.label, answer: p.answer, note: p.note || "" })),
+    context: "Desk answers from the Desk app (test):\n" + plainText(list) };
+  const [hn, hv] = authHeader(s);
+  $("btnSend").disabled = true; setMsg("Sending...");
+  const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 20000);
+  try {
+    const r = await fetch(s.url, { method: "POST", headers: { "Content-Type": "application/json", [hn]: hv }, body: JSON.stringify(payload), signal: ctl.signal, mode: "cors", credentials: "omit" });
+    clearTimeout(to);
+    if (!r.ok) { let t = ""; try { t = (await r.text()).slice(0, 300); } catch (_) {} throw Object.assign(new Error("The answer service said " + r.status + (t ? ": " + t : "")), { http: r.status }); }
+    markSent(list.map(([id]) => id));
+    setMsg("Sent " + list.length + " answer" + (list.length > 1 ? "s" : "") + ".", "ok");
+  } catch (e) {
+    clearTimeout(to);
+    let why = e.name === "AbortError" ? "No reply from the answer service after 20 seconds." :
+      e.http ? e.message + (e.http === 401 ? "\nCheck the sender key in Settings." : "") :
+      "Your browser blocked the send. The answer service does not accept requests sent straight from this page (a browser safety rule), or the link is wrong.";
+    setMsg(why + "\nYour answers are still saved here. Use Copy answers and paste them into chat.", "bad");
+    $("msg").append(el("br"), el("button", { type: "button", style: "margin-top:6px;width:100%", onclick: copyAnswers }, "Copy answers"));
+  } finally { updBar(); }
+};
+
+function fillSettings() { const s = getSettings(); $("sUrl").value = s.url || ""; $("sKey").value = s.key || ""; $("sHdr").value = s.hdr || "Authorization"; }
+$("btnSettings").onclick = () => { fillSettings(); $("dlg").showModal(); };
+$("sCancel").onclick = () => $("dlg").close();
+$("sClear").onclick = () => { localStorage.removeItem(LS_SET); fillSettings(); setMsg("Settings cleared."); $("dlg").close(); };
+$("sSave").onclick = () => {
+  const url = $("sUrl").value.trim();
+  if (url && !/^https:\/\//.test(url)) { alert("The answer link must start with https://"); return; }
+  localStorage.setItem(LS_SET, JSON.stringify({ url, key: $("sKey").value.trim(), hdr: $("sHdr").value.trim() || "Authorization" }));
+  $("dlg").close(); setMsg("Settings saved on this device.", "ok");
+};
+})();
+</script>
+</body>
+</html>
