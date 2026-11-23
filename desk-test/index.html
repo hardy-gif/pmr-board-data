@@ -152,14 +152,14 @@ function itemNode(it) {
     if (it.detail.length > 160) node.append(el("button", { class: "more", type: "button", onclick: (e) => { dd.classList.toggle("clip"); e.target.textContent = dd.classList.contains("clip") ? "More" : "Less"; } }, "More"));
   }
   if (it.meta) node.append(el("div", { class: "meta" }, it.meta));
-  const answers = it.question ? ["Yes", "No", "Done", "Nudge", "Snooze"] : ["Done", "Nudge", "Snooze"];
+  const answers = (it.answers && it.answers.length) ? it.answers : (it.question ? ["Yes", "No", "Done", "Nudge", "Snooze"] : ["Done", "Nudge", "Snooze"]);
   const acts = el("div", { class: "acts" });
   for (const a of answers) {
     const on = p && p.answer === a.toLowerCase();
     acts.append(el("button", { type: "button", class: on ? "on" : "", onclick: () => setAnswer(it, a.toLowerCase()) }, a));
   }
   node.append(acts);
-  const inp = el("input", { type: "text", placeholder: "Note (optional)", enterkeyhint: "done" });
+  const inp = el("input", { type: "text", placeholder: it.notePh || "Note (optional)", enterkeyhint: "done" });
   inp.value = (p && p.note) || "";
   inp.addEventListener("change", () => setNote(it, inp.value));
   inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { inp.blur(); } });
